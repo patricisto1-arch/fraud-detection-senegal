@@ -1,4 +1,4 @@
-import streamlit as st
+﻿import streamlit as st
 import pandas as pd
 import numpy as np
 import plotly.express as px
@@ -216,15 +216,15 @@ with tab1:
                           ["Toutes", "Normal (0)", "Fraude (1)"])
     if classe == "Normal (0)":
         st.dataframe(df[df['Class']==0].head(n),
-                     use_container_width=True)
+                     width='stretch')
     elif classe == "Fraude (1)":
         st.dataframe(df[df['Class']==1].head(n),
-                     use_container_width=True)
+                     width='stretch')
     else:
-        st.dataframe(df.head(n), use_container_width=True)
+        st.dataframe(df.head(n), width='stretch')
 
     section_header("📈", "Statistiques descriptives")
-    st.dataframe(df.describe().round(4), use_container_width=True)
+    st.dataframe(df.describe().round(4), width='stretch')
 
 # ── Tab 2 : Distribution des classes ──────────────────────
 with tab2:
@@ -246,7 +246,7 @@ with tab2:
         fig_bar.update_traces(textposition='outside', textfont_color=FONT_COLOR)
         fig_bar.update_layout(showlegend=False)
         style_fig(fig_bar)
-        st.plotly_chart(fig_bar, use_container_width=True)
+        st.plotly_chart(fig_bar, width='stretch')
 
     with col2:
         fig_pie = px.pie(
@@ -258,7 +258,7 @@ with tab2:
         )
         fig_pie.update_traces(pull=[0, 0.1], textfont_color="#FFFFFF")
         style_fig(fig_pie)
-        st.plotly_chart(fig_pie, use_container_width=True)
+        st.plotly_chart(fig_pie, width='stretch')
 
     st.markdown(f"""
     <div class="full-block card-brown">
@@ -293,13 +293,13 @@ with tab3:
                               title_text='Distribution des montants')
     style_fig(fig_amount)
     fig_amount.update_annotations(font_color=FONT_COLOR)
-    st.plotly_chart(fig_amount, use_container_width=True)
+    st.plotly_chart(fig_amount, width='stretch')
 
     # Statistiques comparatives
     section_header("📊", "Statistiques comparatives — Amount")
     stats = df.groupby('Class')['Amount'].describe().round(2)
     stats.index = ['Normal (0)', 'Fraude (1)']
-    st.dataframe(stats, use_container_width=True)
+    st.dataframe(stats, width='stretch')
 
     # Distribution temporelle
     section_header("🕒", "Distribution temporelle")
@@ -316,7 +316,7 @@ with tab3:
     fig_time.update_layout(height=400, showlegend=False)
     style_fig(fig_time)
     fig_time.update_annotations(font_color=FONT_COLOR)
-    st.plotly_chart(fig_time, use_container_width=True)
+    st.plotly_chart(fig_time, width='stretch')
 
 # ── Tab 4 : Valeurs aberrantes (outliers) ──────────────────
 with tab4:
@@ -361,7 +361,7 @@ with tab4:
         outlier_df = pd.DataFrame(rows)
 
         section_header("📋", "Récapitulatif des valeurs aberrantes")
-        st.dataframe(outlier_df, use_container_width=True, hide_index=True)
+        st.dataframe(outlier_df, width='stretch', hide_index=True)
 
         total_normal_out = outlier_df[outlier_df['Classe'] == 'Normal']['Valeurs aberrantes'].sum()
         total_fraude_out = outlier_df[outlier_df['Classe'] == 'Fraude']['Valeurs aberrantes'].sum()
@@ -392,7 +392,7 @@ with tab4:
             )
             fig_box.update_layout(showlegend=False)
             style_fig(fig_box)
-            st.plotly_chart(fig_box, use_container_width=True)
+            st.plotly_chart(fig_box, width='stretch')
     else:
         st.markdown(
             '<div class="full-block card-brown">Sélectionne au moins une variable pour lancer l\'analyse.</div>',
@@ -421,7 +421,7 @@ with tab5:
         yaxis_title='Feature',
     )
     style_fig(fig_corr)
-    st.plotly_chart(fig_corr, use_container_width=True)
+    st.plotly_chart(fig_corr, width='stretch')
 
     col1, col2 = st.columns(2)
     with col1:
@@ -488,7 +488,7 @@ with tab6:
         fig_cm.update_layout(title=f"Matrice de confusion — {modele_sel}", height=420)
         fig_cm.update_yaxes(autorange="reversed")
         style_fig(fig_cm, legend=False)
-        st.plotly_chart(fig_cm, use_container_width=True)
+        st.plotly_chart(fig_cm, width='stretch')
 
     with col_b:
         st.metric("Precision (Fraude)", f"{d['Precision']:.2f}")

@@ -1,4 +1,4 @@
-import streamlit as st
+﻿import streamlit as st
 import pandas as pd
 import numpy as np
 import plotly.express as px
@@ -170,7 +170,7 @@ st.dataframe(
     .highlight_max(subset=['Fausses alertes'], color='#E8B4AE')
     .format({'Precision':'{:.4f}','Recall':'{:.4f}',
              'F1-Score':'{:.4f}','AUC-ROC':'{:.4f}'}),
-    use_container_width=True
+    width='stretch'
 )
 note_box("🟨 Doré = meilleure valeur de la colonne · 🟥 Rosé = valeur la moins favorable")
 
@@ -208,7 +208,7 @@ with tab1:
         fig_bar.update_layout(yaxis_range=[0, 1.15],
                                paper_bgcolor=CHART_BG, plot_bgcolor=CHART_BG,
                                font_color="#3E2723")
-        st.plotly_chart(fig_bar, use_container_width=True)
+        st.plotly_chart(fig_bar, width='stretch')
 
 with tab2:
     col1, col2 = st.columns(2)
@@ -227,7 +227,7 @@ with tab2:
         fig_det.update_traces(textposition='outside')
         fig_det.update_layout(paper_bgcolor=CHART_BG, plot_bgcolor=CHART_BG,
                                font_color="#3E2723")
-        st.plotly_chart(fig_det, use_container_width=True)
+        st.plotly_chart(fig_det, width='stretch')
 
     with col2:
         fig_fp = px.bar(
@@ -241,7 +241,7 @@ with tab2:
         fig_fp.update_traces(textposition='outside')
         fig_fp.update_layout(paper_bgcolor=CHART_BG, plot_bgcolor=CHART_BG,
                               font_color="#3E2723")
-        st.plotly_chart(fig_fp, use_container_width=True)
+        st.plotly_chart(fig_fp, width='stretch')
 
 with tab3:
     st.markdown("""
@@ -283,7 +283,7 @@ with tab3:
         paper_bgcolor=CHART_BG, plot_bgcolor=CHART_BG,
         font_color="#3E2723",
     )
-    st.plotly_chart(fig_roc, use_container_width=True)
+    st.plotly_chart(fig_roc, width='stretch')
 
 spacer()
 

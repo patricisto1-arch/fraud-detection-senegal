@@ -1,4 +1,4 @@
-import streamlit as st
+﻿import streamlit as st
 import pandas as pd
 import numpy as np
 import pickle
@@ -216,7 +216,7 @@ with col3:
 
 # ── Bouton de prédiction ───────────────────────────────────
 if st.button("🔍 Analyser la transaction", type="primary",
-             use_container_width=True):
+             width='stretch'):
 
     # Construction du vecteur de features (30 features)
     features = np.zeros(30)
@@ -296,7 +296,7 @@ if st.button("🔍 Analyser la transaction", type="primary",
         ))
         fig_gauge.update_layout(height=300, paper_bgcolor="#FBF7F2",
                                  font_color="#3E2723")
-        st.plotly_chart(fig_gauge, use_container_width=True)
+        st.plotly_chart(fig_gauge, width='stretch')
 
     # Détail de la décision
     st.divider()

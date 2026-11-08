@@ -1,4 +1,4 @@
-import streamlit as st
+﻿import streamlit as st
 import pandas as pd
 
 st.set_page_config(
@@ -313,7 +313,7 @@ def highlight_best(s):
 st.dataframe(
     results.style.apply(highlight_best, axis=0).format({"AUC-ROC": "{:.4f}", "F1-Score": "{:.2f}"}),
     hide_index=True,
-    use_container_width=True,
+    width='stretch',
 )
 note_box("🟨 Surlignage doré = meilleure valeur de la colonne. XGBoost offre le meilleur AUC-ROC ; Random Forest le meilleur F1-Score sur la classe Fraude.")
 
