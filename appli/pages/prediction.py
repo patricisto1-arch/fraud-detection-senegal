@@ -1,4 +1,4 @@
-﻿import streamlit as st
+import streamlit as st
 import pandas as pd
 import numpy as np
 import pickle
@@ -163,6 +163,15 @@ st.markdown("""
 APPLI_DIR = Path(__file__).resolve().parent.parent
 MODELS_DIR = APPLI_DIR / "models"
 
+# Colonnes EXACTEMENT dans l'ordre de l'entraînement (cf. notebook) :
+# V1..V28, Amount_scaled, Time_scaled
+FEATURE_COLUMNS = [f"V{i}" for i in range(1, 29)] + ["Amount_scaled", "Time_scaled"]
+
+# Paramètres de standardisation calculés sur le dataset d'entraînement
+# (StandardScaler : z = (x - moyenne) / écart-type)
+AMOUNT_MEAN, AMOUNT_STD = 88.3496, 250.1201
+TIME_MEAN, TIME_STD = 94813.8596, 47488.0626
+
 @st.cache_resource
 def load_models():
     models = {}
@@ -218,20 +227,13 @@ with col3:
 if st.button("🔍 Analyser la transaction", type="primary",
              width='stretch'):
 
-    # Construction du vecteur de features (30 features)
-    features = np.zeros(30)
-    features[0]  = time
-    features[1]  = 0      # V1
-    features[2]  = 0      # V2
-    features[3]  = v3
-    features[4]  = v4
-    features[10] = v10
-    features[11] = v11
-    features[12] = v12
-    features[13] = v14
-    features[15] = v16
-    features[16] = v17
-    features[29] = amount
+    # Construction de la ligne de features, dans l'ordre d'entraînement
+    valeurs = {f"V{i}": 0.0 for i in range(1, 29)}
+    valeurs.update({"V3": v3, "V4": v4, "V10": v10, "V11": v11,
+                    "V12": v12, "V14": v14, "V16": v16, "V17": v17})
+    valeurs["Amount_scaled"] = (amount - AMOUNT_MEAN) / AMOUNT_STD
+    valeurs["Time_scaled"] = (time - TIME_MEAN) / TIME_STD
+    features = pd.DataFrame([valeurs], columns=FEATURE_COLUMNS)
 
     modele = models[modele_choisi]
     st.divider()
@@ -242,13 +244,13 @@ if st.button("🔍 Analyser la transaction", type="primary",
     # Prédiction selon le type de modèle
     with col_res1:
         if modele_choisi == 'Isolation Forest':
-            pred_raw = modele.predict([features])[0]
+            pred_raw = modele.predict(features)[0]
             prediction = 1 if pred_raw == -1 else 0
-            score = float(-modele.score_samples([features])[0])
+            score = float(-modele.score_samples(features)[0])
             proba = min(score / 0.5, 1.0)
         else:
-            prediction = modele.predict([features])[0]
-            proba = modele.predict_proba([features])[0][1]
+            prediction = modele.predict(features)[0]
+            proba = modele.predict_proba(features)[0][1]
 
         # Application du seuil
         if modele_choisi != 'Isolation Forest':
